@@ -8,9 +8,20 @@ const TEXT =
 
 const outputDir = process.env.OUTPUT_DIR ?? "/output";
 
-const length = [...TEXT].length;
-if (length < 1 || length > 200) {
-  throw new Error(`entry must be 1-200 characters, got ${length}`);
+const codePoints = [...TEXT];
+if (codePoints.length < 1 || codePoints.length > 200) {
+  throw new Error(
+    `entry must be 1-200 characters (code points), got ${codePoints.length}`,
+  );
+}
+if (TEXT.includes("\n") || TEXT.includes("\r")) {
+  throw new Error("entry must be a single line with no line breaks");
+}
+if (TEXT.trim().length === 0) {
+  throw new Error("entry must not be only white space");
+}
+if (TEXT.endsWith("\n")) {
+  throw new Error("entry must not end with a trailing newline");
 }
 
 mkdirSync(outputDir, { recursive: true });
